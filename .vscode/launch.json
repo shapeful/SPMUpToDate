@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SPMUpToDate}",
+            "name": "Debug SPMUpToDate",
+            "program": "${workspaceFolder:SPMUpToDate}/.build/debug/SPMUpToDate",
+            "preLaunchTask": "swift: Build Debug SPMUpToDate"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SPMUpToDate}",
+            "name": "Release SPMUpToDate",
+            "program": "${workspaceFolder:SPMUpToDate}/.build/release/SPMUpToDate",
+            "preLaunchTask": "swift: Build Release SPMUpToDate"
+        }
+    ]
+}

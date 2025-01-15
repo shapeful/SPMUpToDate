@@ -1,6 +1,24 @@
 {
-  "originHash" : "c1655a90b5254729d473c8e4c9f25223f2d59bceb00cd17d9a99b468219d06c1",
+  "originHash" : "69b6f1e0759e3538429ae228c1b28a23ade22b127b881ad13289494877daea2e",
   "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "json",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/skelpo/json.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2673a405aaab323678a8fd118492b393ae45cebd"
+      }
+    },
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
@@ -8,6 +26,15 @@
       "state" : {
         "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
         "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "swift-package-list",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shapeful/swift-package-list.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "00bdd31b03d479dd04135a841e2acda6d7cf5dcf"
       }
     }
   ],
