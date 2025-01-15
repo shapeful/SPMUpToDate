@@ -1,5 +1,5 @@
 {
-  "originHash" : "69b6f1e0759e3538429ae228c1b28a23ade22b127b881ad13289494877daea2e",
+  "originHash" : "4e0e0fd4f3495bdc002e0d0bb2634e57754a4b77d7a5bc452464c7979e6147dc",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
         "version" : "1.5.0"
-      }
-    },
-    {
-      "identity" : "swift-package-list",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/shapeful/swift-package-list.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "00bdd31b03d479dd04135a841e2acda6d7cf5dcf"
       }
     }
   ],

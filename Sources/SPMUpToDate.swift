@@ -99,8 +99,10 @@ struct SPMUpToDate: AsyncParsableCommand {
             updatable: updatedRepos.filter({ $0.currentVersion != $0.latestVersion }).map(\.self)
 
         )
-
-        try print(String(data: encoder.encode(output), encoding: .utf8)!)
+        let data = try encoder.encode(output)
+        print(String(data: data, encoding: .utf8)!)
+        let outputURL = URL(fileURLWithPath: "output.json")
+        try data.write(to: outputURL)
 
     }
 
@@ -164,7 +166,7 @@ struct SPMUpToDate: AsyncParsableCommand {
             if let tag = data.array?.first?.tag_name.string,
                 let publishedAt = data.array?.first?.published_at.string
             {
-                print("updated", repo.repositoryURL, tag, publishedAt)
+                // print("updated", repo.repositoryURL, tag, publishedAt)
                 return repo.updated(latestVersion: tag, publishedAt: publishedAt)
             } else {
                 print("\(repo.name) no releases")
