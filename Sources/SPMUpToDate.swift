@@ -154,7 +154,7 @@ struct SPMUpToDate: AsyncParsableCommand {
                     .value
                     .unwrapped()
 
-//                    print("updated", repo.repositoryURL, name, data.commit.author.date)
+//                    print("updated", repo.repositoryURL, name.replacingOccurrences(of: "v", with: ""), data.commit.author.date)
                     return repo.updated(
                         latestVersion: name.replacingOccurrences(of: "v", with: ""),
                         publishedAt: data.commit.author.date.string)
@@ -166,8 +166,8 @@ struct SPMUpToDate: AsyncParsableCommand {
             if let tag = data.array?.first?.tag_name.string,
                 let publishedAt = data.array?.first?.published_at.string
             {
-//                print("updated", repo.repositoryURL, tag, publishedAt)
-                return repo.updated(latestVersion: tag, publishedAt: publishedAt)
+//                print("updated", repo.repositoryURL, tag.replacingOccurrences(of: "v", with: ""), publishedAt)
+                return repo.updated(latestVersion: tag.replacingOccurrences(of: "v", with: ""), publishedAt: publishedAt)
             } else {
                 print("\(repo.name) no releases")
             }
