@@ -8,8 +8,7 @@ import Alamofire
 import ArgumentParser
 import Foundation
 import JSON
-import SwiftPackageList
-
+//import SwiftPackageList
 //import SwiftPackageListCore
 
 extension JSON: @unchecked @retroactive Sendable {}
@@ -155,9 +154,10 @@ struct SPMUpToDate: AsyncParsableCommand {
                     .value
                     .unwrapped()
 
-                    // print("updated", repo.repositoryURL, name, data.commit.author.date)
+//                    print("updated", repo.repositoryURL, name, data.commit.author.date)
                     return repo.updated(
-                        latestVersion: name, publishedAt: data.commit.author.date.string)
+                        latestVersion: name.replacingOccurrences(of: "v", with: ""),
+                        publishedAt: data.commit.author.date.string)
                 } else {
                     print(d)
                 }
@@ -166,7 +166,7 @@ struct SPMUpToDate: AsyncParsableCommand {
             if let tag = data.array?.first?.tag_name.string,
                 let publishedAt = data.array?.first?.published_at.string
             {
-                // print("updated", repo.repositoryURL, tag, publishedAt)
+//                print("updated", repo.repositoryURL, tag, publishedAt)
                 return repo.updated(latestVersion: tag, publishedAt: publishedAt)
             } else {
                 print("\(repo.name) no releases")
