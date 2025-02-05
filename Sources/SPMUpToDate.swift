@@ -110,7 +110,7 @@ struct SPMUpToDate: AsyncParsableCommand {
         
         let data = try encoder.encode(output)
         print(String(data: data, encoding: .utf8)!)
-        let outputURL = URL(fileURLWithPath: "output.json")
+        let outputURL = URL(fileURLWithPath: "updatablePackages.json")
         try data.write(to: outputURL)
 
     }
