@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
     name: "SPMUpToDate",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v10_15)
     ],
     products: [
-         .executable(name: "SPMUpToDate", targets: ["SPMUpToDate"])
+        .executable(name: "SPMUpToDate", targets: ["SPMUpToDate"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
@@ -25,7 +25,6 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "JSON", package: "json"),
                 .product(name: "Alamofire", package: "alamofire"),
-                // .product(name: "SwiftPackageList", package: "swift-package-list"),
             ]
         )
     ]
