@@ -146,7 +146,8 @@ struct SPMUpToDate: AsyncParsableCommand {
             .response
             .value
             .unwrapped()
-            //print(data)
+            
+            // print(data)
             if let d = data.array?.first {
                 if let url = d.commit.url.string,
                     let name = d.name.string
@@ -173,8 +174,17 @@ struct SPMUpToDate: AsyncParsableCommand {
                 }
             }
         } else {
-            if let tag = data.array?.first?.tag_name.string,
-                let publishedAt = data.array?.first?.published_at.string
+            // print(data)
+            if let release = data.array?.first(where: { tag in
+                if let tagName = tag.tag_name.string {
+                    return  tagName.contains("CocoaPods") == false
+                } else {
+                    return false
+                }
+               
+            }),
+             let tag = release.tag_name.string,
+                let publishedAt = release.published_at.string
             {
                 //                print("updated", repo.repositoryURL, tag.replacingOccurrences(of: "v", with: ""), publishedAt)
                 return repo.updated(
