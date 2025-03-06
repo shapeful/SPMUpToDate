@@ -15,7 +15,7 @@ extension Optional {
     enum Error: Swift.Error {
         case missingValue(UInt)
     }
-    
+
     func unwrapped(line: UInt = #line) throws -> Wrapped {
         guard let value = self else {
             throw Error.missingValue(line)
@@ -62,31 +62,36 @@ struct Repo: Codable, SafeJSONRepresentable {
 
 @main
 struct SPMUpToDate: AsyncParsableCommand {
-    @Argument(help: "optional path for a Swift-package-list generated file, defaults to `package-list.json`") var packageListPath:
-        String = "package-list.json"
+    @Argument(
+        help:
+            "optional path for a Swift-package-list generated file, defaults to `package-list.json`"
+    ) var packageListPath: String = "package-list.json"
 
-    @Flag(help: "updatable-only: only show repos that have an update") var updatableOnly: Bool = false
-    
+    @Flag(help: "updatable-only: only show repos that have an update") var updatableOnly: Bool =
+        false
+
     mutating func run() async throws {
         var repos = [Repo]()
 
-            let packageListURL = URL(fileURLWithPath: packageListPath)
+        let packageListURL = URL(fileURLWithPath: packageListPath)
 
-            let packageListJSON = try JSONDecoder().decode(
-                JSON.self, from: Data(contentsOf: packageListURL))
-        
-            for package in packageListJSON.array ?? [JSON]() {
-                do {
-                    repos.append(
-                        try Repo(
-                            currentVersion: package.version.string.unwrapped(),
-                            name: package.name.string.unwrapped(),
-                            repositoryURL: package.repositoryURL.string.unwrapped())
-                    )
-                } catch {
-                    print("failed: \(package.version.string ?? "No Version")")
-                }
+        let packageListJSON = try JSONDecoder().decode(
+            JSON.self, from: Data(contentsOf: packageListURL))
+
+        for package in packageListJSON.array ?? [JSON]() {
+            do {
+                repos.append(
+                    try Repo(
+                        currentVersion: package.version.string.unwrapped(),
+                        name: package.name.string.unwrapped(),
+                        repositoryURL: (package.repositoryURL.string ?? package.location.string).unwrapped())
+                )
+            } catch {
+                print(error)
+                print(package)
+                print("failed: \(package.version.string ?? "No Version")")
             }
+        }
 
         print("Checking repository updates...")
         var updatedRepos: [Repo] = []
@@ -100,14 +105,16 @@ struct SPMUpToDate: AsyncParsableCommand {
         if updatableOnly {
             output = Output(
                 repos: [],
-                updatable: updatedRepos.filter({ $0.currentVersion != $0.latestVersion }).map(\.self))
-            
+                updatable: updatedRepos.filter({ $0.currentVersion != $0.latestVersion }).map(
+                    \.self))
+
         } else {
             output = Output(
                 repos: updatedRepos,
-                updatable: updatedRepos.filter({ $0.currentVersion != $0.latestVersion }).map(\.self))
+                updatable: updatedRepos.filter({ $0.currentVersion != $0.latestVersion }).map(
+                    \.self))
         }
-        
+
         let data = try encoder.encode(output)
         print(String(data: data, encoding: .utf8)!)
         let outputURL = URL(fileURLWithPath: "updatablePackages.json")
@@ -146,9 +153,22 @@ struct SPMUpToDate: AsyncParsableCommand {
             .response
             .value
             .unwrapped()
-            
+
             // print(data)
-            if let d = data.array?.first {
+//            if repoTag == "google/interop-ios-for-google-sdks" {
+//                print(data)
+//            }
+            
+            if let d = data.array?.first(where: { tag in
+                
+                if tag.name.string?.contains("CocoaPods") == .some(true) {
+                    return false
+                } else {
+                    return true
+                }
+            }) {
+//            if let d = data.array?.first {
+                
                 if let url = d.commit.url.string,
                     let name = d.name.string
                 {
@@ -165,7 +185,9 @@ struct SPMUpToDate: AsyncParsableCommand {
                     .value
                     .unwrapped()
 
-                    print("updated", repo.repositoryURL, name.replacingOccurrences(of: "v", with: ""), data.commit.author.date)
+                    print(
+                        "updated", repo.repositoryURL, name.replacingOccurrences(of: "v", with: ""),
+                        data.commit.author.date)
                     return repo.updated(
                         latestVersion: name.replacingOccurrences(of: "v", with: ""),
                         publishedAt: data.commit.author.date.string)
@@ -177,13 +199,17 @@ struct SPMUpToDate: AsyncParsableCommand {
             // print(data)
             if let release = data.array?.first(where: { tag in
                 if let tagName = tag.tag_name.string {
-                    return  tagName.contains("CocoaPods") == false
+                    if tagName.contains("CocoaPods") {
+                        return false
+                    } else {
+                        return true
+                    }
                 } else {
                     return false
                 }
-               
+
             }),
-             let tag = release.tag_name.string,
+                let tag = release.tag_name.string,
                 let publishedAt = release.published_at.string
             {
                 //                print("updated", repo.repositoryURL, tag.replacingOccurrences(of: "v", with: ""), publishedAt)
